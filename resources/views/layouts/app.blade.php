@@ -20,6 +20,11 @@
     <link href="{{ asset('css/app.css') }}" rel="stylesheet">
 </head>
 <body>
+    @if(session()->has('success'))
+    <div class="alert alert-success text-center">
+        {{ session()->get('success') }}
+    </div>
+    @endif
     <div id="app">
         <nav class="navbar navbar-expand-md navbar-light bg-white shadow-sm">
             <div class="container">
@@ -72,9 +77,17 @@
             </div>
         </nav>
 
-        <main class="py-4">
+        <main class="py-5 my-5">
             @yield('content')
         </main>
+
+        <footer class="py-5 shadow-sm bg-white">
+            <div class="container">
+                <p class="text-secondary text-center">
+                    Created By <span class="text-primary font-weight-bold">Bartłomiej Ciołek</span>
+                </p>
+            </div>
+        </footer>
     </div>
 </body>
 </html>

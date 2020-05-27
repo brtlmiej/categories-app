@@ -12,4 +12,22 @@ class Category extends Model
      * @var array
      */
     protected $fillable = ['name', 'parent_id'];
+
+    /**
+     * Relationship with parent category.
+     * 
+     */
+    public function parentCategory()
+    {
+        return $this->belongsTo('App\Category', 'parent_id');
+    }
+
+    /**
+     * Relationship with subcategories.
+     * 
+     */
+    public function subcategories()
+    {
+        return $this->hasMany('App\Category', 'parent_id');
+    }
 }

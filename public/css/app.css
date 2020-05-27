@@ -1,5 +1,22 @@
 @import url(https://fonts.googleapis.com/css?family=Nunito);@charset "UTF-8";
 
+/*
+  Castom CSS
+*/
+
+section{
+  margin-bottom: 100px;
+}
+
+.path-item, .path-item-leaf{
+  font-size: 1.1rem;
+  font-weight: bold;
+}
+
+.path-item-leaf{
+  font-size: 1.3rem;
+}
+
 /*!
  * Bootstrap v4.5.0 (https://getbootstrap.com/)
  * Copyright 2011-2020 The Bootstrap Authors
