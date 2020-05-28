@@ -6,7 +6,7 @@
             Categories App
         </div>
         <div>
-            <a class="btn btn-outline-primary" href = "{{ route('category.index') }}">View All Categories</a>
+            <a class="btn btn-outline-primary btn-lg" href = "{{ route('category.index') }}">View All Categories</a>
         </div>
     </div>
 </section>

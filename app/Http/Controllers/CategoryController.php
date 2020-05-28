@@ -28,6 +28,23 @@ class CategoryController extends Controller
     }
 
     /**
+     * Validates data given in request
+     */
+    private function validateData(Request $request)
+    {
+        $ids = Category::pluck('id')->toArray();
+
+        return $request->validate([
+            'name' => 'required|min:3|max:25',
+            'parent_id' => [
+                'nullable',
+                'integer',
+                Rule::in($ids),
+            ],
+        ]);
+    }
+
+    /**
      * Show all main categories.
      * 
      * @return View
@@ -62,21 +79,14 @@ class CategoryController extends Controller
         // array of categories' ids
         $ids = Category::pluck('id')->toArray();
 
-        $valdatedData = $request->validate([
-            'name' => 'required|min:3|max:25',
-            'parent_id' => [
-                'nullable',
-                'integer',
-                Rule::in($ids),
-            ],
-        ]);
+        $valdatedData = $this->validateData($request);
 
         $category = new Category($valdatedData);
         $category->save();
 
         return redirect()
             ->route('category.show', ['category' => $category])
-            ->with('success', 'Category created. Now You are in ' . $category->name);
+            ->with('success', 'Category created. Now You are on <b>' . $category->name . '</b> category page.');
     }
 
     /**
@@ -100,6 +110,57 @@ class CategoryController extends Controller
      */
     public function edit(Category $category)
     {
-        //
+        // get all categories
+        $categories = Category::all();
+
+        return view('category.edit', compact('category', 'categories'));
+    }
+
+    /**
+     * Updates specyfic category's data.
+     * 
+     * @param Category $category
+     * @param Request $request
+     * @return Redirect
+     */
+    public function update(Category $category, Request $request)
+    {
+        $validatedData = $this->validateData($request);
+
+        $category->name = $validatedData['name'];
+        $category->parent_id = $validatedData['parent_id'];
+        $category->save();
+
+        return redirect()
+            ->route('category.show', ['category' => $category])
+            ->with('success', 'Category modified. Now You are on <b>' . $category->name . '</b> category page.');
+    }
+
+    /**
+     * Shows warning info before deleting category.
+     * 
+     * @param Category $category
+     * @return View
+     */
+    public function deleteWarning(Category $category)
+    {
+        return view('category.warning.delete', compact('category'));
+    }
+
+    /**
+     * Deletes category with it subcategories.
+     * 
+     * @param Category $category
+     */
+    public function destroy(Category $category)
+    {
+        // save parent_id for redirect
+        $parentId = $category->parent_id;
+
+        $category->delete();
+
+        return redirect()
+            ->route('category.show', ['category' => $parentId])
+            ->with('success', 'Category deleted');
     }
 }

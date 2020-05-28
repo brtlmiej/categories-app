@@ -5,7 +5,8 @@
         <h1 class="text-capitalize mb-4">
             Category <span class="text-primary">{{ $category->name }}</span>
         </h1>
-        <button class="btn btn-primary">Edit Category</button>
+        <a href="{{ route('category.edit', ['category' => $category]) }}" class="btn btn-primary">Edit Category</a>
+        <a href="{{ route('category.warning.delete', ['category' => $category]) }}" class="btn btn-danger">Delete Category</a>
     </section>
 
     <section class="container text-center text-md-left">

@@ -22,9 +22,16 @@
 <body>
     @if(session()->has('success'))
     <div class="alert alert-success text-center">
-        {{ session()->get('success') }}
+        {!! session()->get('success') !!}
     </div>
     @endif
+
+    @if(session()->has('warning'))
+    <div class="alert alert-warning text-center">
+        {!! session()->get('warning') !!}
+    </div>
+    @endif
+
     <div id="app">
         <nav class="navbar navbar-expand-md navbar-light bg-white shadow-sm">
             <div class="container">
@@ -42,7 +49,7 @@
                     </ul>
 
                     <!-- Right Side Of Navbar -->
-                    <ul class="navbar-nav ml-auto">
+                    <ul class="navbar-nav ml-auto text-center">
                         <!-- Authentication Links -->
                         @guest
                             <li class="nav-item">
@@ -66,6 +73,10 @@
                                         {{ __('Logout') }}
                                     </a>
 
+                                    <a class="dropdown-item" href="{{ route('home') }}">
+                                        Home Page
+                                    </a>
+
                                     <form id="logout-form" action="{{ route('logout') }}" method="POST" style="display: none;">
                                         @csrf
                                     </form>
@@ -84,7 +95,10 @@
         <footer class="py-5 shadow-sm bg-white">
             <div class="container">
                 <p class="text-secondary text-center">
-                    Created By <span class="text-primary font-weight-bold">Bartłomiej Ciołek</span>
+                    Created By 
+                    <a href="https://github.com/brtlmiej" class="text-primary font-weight-bold" target="blank">
+                        Bartłomiej Ciołek
+                    </a>
                 </p>
             </div>
         </footer>

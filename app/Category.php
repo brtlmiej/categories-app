@@ -12,6 +12,22 @@ class Category extends Model
      * @var array
      */
     protected $fillable = ['name', 'parent_id'];
+    
+    /**
+    * Override parent boot and Call deleting event
+    *
+    * @return void
+    */
+    protected static function boot() 
+    {
+        parent::boot();
+
+        static::deleting(function($categories) {
+            foreach ($categories->subcategories()->get() as $subcat) {
+                $subcat->delete();
+            }
+        });
+   }
 
     /**
      * Relationship with parent category.
