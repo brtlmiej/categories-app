@@ -32,6 +32,7 @@ class CategoryController extends Controller
      */
     private function validateData(Request $request)
     {
+        // ids of all categories
         $ids = Category::pluck('id')->toArray();
 
         return $request->validate([
@@ -51,7 +52,15 @@ class CategoryController extends Controller
     */
     public function index()
     {
-        $categories = Category::where('parent_id', NULL)->get();
+        $categories = array();
+
+        foreach(Category::where('parent_id', NULL)->get() as $cat)
+        {
+            $cat->link = route('category.show', ['category' => $cat]);
+            $cat->subcats = [];
+            $categories[] = $cat;
+        }
+
         return view('category.index', compact('categories'));
     }
 
@@ -162,5 +171,25 @@ class CategoryController extends Controller
         return redirect()
             ->route('category.show', ['category' => $parentId])
             ->with('success', 'Category deleted');
+    }
+
+    public function getSubcategories(Request $request, Category $category)
+    {
+        
+        $categories = array();
+        $sortedBy = $request->get('sortedBy');
+        if($sortedBy != 'name' && $sortedBy != ('created_at'))
+        {
+            $sortedBy = 'id';
+        }
+
+        foreach($category->subcategories()->orderBy($sortedBy, 'asc')->get() as $cat)
+        {
+            $cat->link = route('category.show', ['category' => $cat]);
+            $cat->subcats = [];
+            $categories[] = $cat;
+        }
+
+        return response()->json($categories, 200);
     }
 }

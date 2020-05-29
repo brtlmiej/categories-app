@@ -1,0 +1,11 @@
+section{
+    margin-bottom: 100px;
+}
+
+.path-item{
+    font-size: 1.1rem;
+}
+
+.path-item-leaf{
+    font-size: 1.3rem;
+}

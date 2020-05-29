@@ -12,14 +12,14 @@
     <section class="container text-center text-md-left">
         <h3 class="mb-4">Category Path</h3>
         <div class="ml-md-5">
-            <span class="path-item text-capitalize">
+            <span class="path-item text-capitalize font-weight-bold">
                 <a href="{{ route('category.index') }}" class="text-secondary">Root</a> -> </span>
         @foreach($path as $item)
-            <span class="path-item text-capitalize">
+            <span class="path-item text-capitalize font-weight-bold">
                 <a class="text-dark" href="{{ route('category.show', ['category' => $item]) }}">{{ $item->name }}</a> ->
             </span>
         @endforeach
-            <span class="path-item-leaf text-capitalize text-primary">{{ $category->name }}</span>
+            <span class="path-item-leaf text-capitalize text-primary font-weight-bold">{{ $category->name }}</span>
         </div>
     </section>
 
