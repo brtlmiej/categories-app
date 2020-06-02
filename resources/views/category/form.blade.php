@@ -1,7 +1,7 @@
             @csrf
             <div class="form-group">
                 <label for="name">Category Name</label>
-                <input value="{{ isset($category) ? $category->name : old('name') }}" type="text" name="name" id="name" class="form-control" placeholder="Name" autocomplete="off">
+                <input value="{{  old('name') ?? $category->name }}" type="text" name="name" id="name" class="form-control" placeholder="Name" autocomplete="off">
                 <small id="nameHelp" class="form-text text-muted">Category name must include min 3 and max 25 characters.</small>
             </div>
             @error('name')
@@ -13,7 +13,9 @@
                 <select class="form-control" id="parent_id" name="parent_id">
                     <option value="">Root</option>
                 @foreach($categories as $cat)
-                    <option {{ (isset($category) ? $category->parent_id : old('parent_id') ) == $cat->id ? "selected" : "" }} value="{{ $cat->id }}">{{ $cat->name }}</option>
+                    @if($category->id != $cat->id)
+                    <option {{ (old('parent_id') ?? $category->parent_id) == $cat->id ? "selected" : "" }} value="{{ $cat->id }}">{{ $cat->name }}</option>
+                    @endif
                 @endforeach
                 </select>
                 <small id="nameHelp" class="form-text text-muted">

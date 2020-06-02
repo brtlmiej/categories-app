@@ -23,7 +23,7 @@ class CategoryController extends Controller
         else
         {
             $parent = Category::find($category->parent_id);
-            return array_merge([$parent], $this->getPath($parent));
+            return [$parent, ...$this->getPath($parent)];
         }
     }
 
@@ -43,6 +43,26 @@ class CategoryController extends Controller
                 Rule::in($ids),
             ],
         ]);
+    }
+
+    public function getSubcategories(Request $request, Category $category)
+    {
+        
+        $categories = array();
+        $sortedBy = $request->get('sortedBy');
+        if($sortedBy != 'name' && $sortedBy != ('created_at'))
+        {
+            $sortedBy = 'id';
+        }
+
+        foreach($category->subcategories()->orderBy($sortedBy, 'asc')->get() as $cat)
+        {
+            $cat->link = route('category.show', ['category' => $cat]);
+            $cat->subcats = [];
+            $categories[] = $cat;
+        }
+
+        return response()->json($categories, 200);
     }
 
     /**
@@ -136,6 +156,8 @@ class CategoryController extends Controller
     {
         $validatedData = $this->validateData($request);
 
+        $request->validate(['parent_id' => 'not_in:'.$category->id]);
+
         $category->name = $validatedData['name'];
         $category->parent_id = $validatedData['parent_id'];
         $category->save();
@@ -171,25 +193,5 @@ class CategoryController extends Controller
         return redirect()
             ->route('category.show', ['category' => $parentId])
             ->with('success', 'Category deleted');
-    }
-
-    public function getSubcategories(Request $request, Category $category)
-    {
-        
-        $categories = array();
-        $sortedBy = $request->get('sortedBy');
-        if($sortedBy != 'name' && $sortedBy != ('created_at'))
-        {
-            $sortedBy = 'id';
-        }
-
-        foreach($category->subcategories()->orderBy($sortedBy, 'asc')->get() as $cat)
-        {
-            $cat->link = route('category.show', ['category' => $cat]);
-            $cat->subcats = [];
-            $categories[] = $cat;
-        }
-
-        return response()->json($categories, 200);
     }
 }
